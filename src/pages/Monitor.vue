@@ -109,7 +109,7 @@ export default {
       managers: [{
         name: 'F1EX',
         icon: require('@/assets/images/f1ex.png'),
-        link: 'https://www.jianshu.com/p/ae8f7f6696d1',
+        link: '7000101948',
         class: 'flicker'
       }, {
         name: 'B1',

@@ -42,7 +42,7 @@ async function handleGetNodes() {
   let tpl = Object.assign(config.nodes, {})
   let nodes = resp
   for (var i = nodes.length; i--; ) {
-    nodes[i].name = 'Anonymous Node'
+    nodes[i].name = 'Anonymous'
     nodes[i].text = ''
     for (var j = tpl.length; j--; ) {
       if (tpl[j].signer === nodes[i].signer) {

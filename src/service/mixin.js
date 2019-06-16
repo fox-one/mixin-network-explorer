@@ -1,20 +1,20 @@
 import http from './http/mixin'
 
 export default {
-  getAssets() {
-  return http.get('/assets')
+  getAssets(params={}) {
+    return http.get('/assets', params)
   },
-  getAsset(id) {
-    return http.get(`/assets/${id}`)
+  getAsset(id, params={}) {
+    return http.get(`/assets/${id}`, params)
   },
-  getAssetAddresses(id) {
-    return http.get(`/assets/${id}/addresses`)
+  getAssetAddresses(id, params={}) {
+    return http.get(`/assets/${id}/addresses`, { params })
   },
-  getSnapshots(params) {
+  getSnapshots(params={}) {
     return http.get('/snapshots', { params })
   },
-  getSnapshot(id) {
-    return http.get(`/network/snapshots/${id}`).then(res => {
+  getSnapshot(id, params={}) {
+    return http.get(`/network/snapshots/${id}`, { params }).then(res => {
       const snapshot = {
         amount: res.amount,
         symbol: res.asset.symbol,

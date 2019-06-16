@@ -30,7 +30,7 @@ class OAuth {
     const data = { client_id: CLIENT_ID, code, code_verifier: verifier }
     let res = await http.post('/oauth/token', { data });
     const { access_token } = res;
-    localStorage.setItem('token', access_token);
+    // localStorage.setItem('token', access_token);
     return res
   }
 }

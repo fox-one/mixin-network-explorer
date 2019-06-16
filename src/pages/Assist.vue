@@ -21,9 +21,6 @@
         <van-row style="padding: 10px;">
           <van-button type="info" plain style="width: 100%" @click="copyToken">Copy Public Access Token</van-button>        
         </van-row>
-        <van-row style="padding: 10px;">
-          <van-button type="info" plain style="width: 100%" @click="viewAssets">View Assets</van-button>        
-        </van-row>
       </div>
       <div class="section-title">Revoke Token</div>
       <div class="hint">Revoke Public Access Token for your account.</div>
@@ -56,6 +53,9 @@ export default {
   components: {
   },
   mounted() {
+    if (this.$route.query.access_token) {
+      this.tokenGenerated = this.$route.query.access_token || ''
+    }
   },
   methods: {
     back () {
@@ -63,9 +63,6 @@ export default {
     },
     copyToken () {
       utils.copyEl(this.$refs.token)
-    },
-    viewAssets () {
-      this.$router.push('/tools/assets-viewer?token=' + encodeURIComponent(this.tokenGenerated))
     },
     generate () {
       MixinService.getAssets().then(res => {

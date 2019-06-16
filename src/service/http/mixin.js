@@ -20,8 +20,8 @@ instance.interceptors.request.use(
     // if (process.env.NODE_ENV !== 'production') {
     //   config.headers.Authorization = 'Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJhaWQiOiJmNDAzYjk0OC02NzBkLTRkMjAtYTQwYy1kNDc4YzdiZTVkMWUiLCJleHAiOjE1OTA0NzQ5NzEsImlhdCI6MTU1ODkzODk3MSwiaXNzIjoiMTdhYzUyNWItNWUxMi00NGIwLThmNTEtNWJlYjhhYTFhMTI5In0.MxwEV5byAagS-nb28Kyq9EkdeqxcewL3n0ekRG2eSbZS1iyeUEXl5neqFOR1ylBwvJgh3J5H0chWZWYyGWdQxB2NLHP8aF8QoVudFJfpiv67Jf-5fwrmkcZHOLqRYyidDQdFrwOCpxnHKqPBzvFmVzknyqKce1EasL8SsrfmXnw'
     // }
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token')
+    let token = config.token || localStorage.getItem('token')
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config

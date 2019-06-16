@@ -3,7 +3,7 @@
     <div class="page-top">
       <h1 class="title page-title">Mixin Network Explorer</h1>
       <div class="entry-wrapper">
-        <van-field placeholder="Snapshot id or public token "
+        <van-field placeholder="Snapshot id, Account token"
           left-icon="search"
           v-model="searchValue"
         ></van-field>
@@ -70,11 +70,11 @@ export default {
   },
   async mounted () {
     let result = await axios.get('https://node.f1ex.io/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
-    // const result = require('../../public/mocking.json')
+    result = result.data
+    // let result = require('../../public/mocking.json')
     let nodes = []
     let max = 0
     let min = Number.MAX_SAFE_INTEGER
-    result = result.data
     for (let ix = 0; ix < result.nodes.length; ix++) {
       const node = result.nodes[ix]
       let statData = node.stat.data
@@ -152,12 +152,14 @@ export default {
     },
     doSearch () {
       var searchValue = this.searchValue.trim()
-      if (/.{8}-.{4}-.{4}-.{4}-.{12}/.test(searchValue)) {
-        // legacy snapshot id
+      if (/^.{8}-.{4}-.{4}-.{4}-.{12}$/.test(searchValue)) {
+        // snapshot id
         window.location.href = `https://mixin.one/snapshots/${searchValue}`      
-      } else { 
+      } else if (/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.[a-zA-Z0-9\-_]+$/.test(searchValue)) { 
         // token
         this.$router.push('/tools/assets-viewer?token=' + encodeURIComponent(this.searchValue))
+      } else {
+        alert('unsupported query')
       }
     }
   }

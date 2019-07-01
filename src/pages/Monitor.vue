@@ -78,7 +78,7 @@ export default {
     for (let ix = 0; ix < result.nodes.length; ix++) {
       const node = result.nodes[ix]
       let statData = node.stat.data
-      if (statData) {
+      if (statData && statData.graph) {
         if (statData.graph.topology < min) {
           min = statData.graph.topology
         }
@@ -90,15 +90,17 @@ export default {
 
     for (let ix = 0; ix < result.nodes.length; ix++) {
       let node = result.nodes[ix]
-      let val = max - node.stat.data.graph.topology
-      if (val < 10) {
-        node.level = 0
-      } else if (val < 30) {
-        node.level = 1
-      } else {
-        node.level = 2
+      if (node.stat.data && node.stat.data.graph) {
+        let val = max - node.stat.data.graph.topology
+        if (val < 10) {
+          node.level = 0
+        } else if (val < 30) {
+          node.level = 1
+        } else {
+          node.level = 2
+        }
+        nodes.push(node)
       }
-      nodes.push(node)
     }
     this.nodes = nodes
     this.updatedAt = new Date(result.updatedAt).toLocaleString()

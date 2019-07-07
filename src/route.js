@@ -1,17 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import About from '@/pages/About.vue'
-import Tools from '@/pages/Tools.vue'
-import Cal from '@/pages/Cal.vue'
-import AssetsViewer from '@/pages/AssetsViewer.vue'
-import Assist from '@/pages/Assist.vue'
-import MixinOAuth from '@/pages/MixinOAuth.vue'
-import Monitor from '@/pages/Monitor.vue'
+import About from '@/pages/About'
+import Tools from '@/pages/Tools'
+import Cal from '@/pages/Cal'
+import AssetsViewer from '@/pages/AssetsViewer'
+import Assist from '@/pages/Assist'
+import MixinOAuth from '@/pages/MixinOAuth'
+import Monitor from '@/pages/Monitor'
+import Home from '@/pages/Home'
+import NodeDetail from '@/pages/NodeDetail'
 
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Monitor },
+  { path: '/', component: Home },
+  { path: '/nodes/:id', component: NodeDetail },
+  { path: '/monitor', component: Monitor },
   { path: '/about', component: About },
   { path: '/tools', component: Tools },
   { path: '/tools/cal/:name', component: Cal },

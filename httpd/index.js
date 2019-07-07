@@ -101,6 +101,14 @@ async function handleGetTopSnapshots(addr) {
   }
 }
 
+async function handleGetInfo(addr) {
+  let ret = await rpcNode({ host: addr }, {
+    "method": "getinfo",
+    "params": []
+  })
+  return ret
+}
+
 exports.handler = async (event) => {
   console.log("request: " + JSON.stringify(event))
   let cmd = event
@@ -110,7 +118,7 @@ exports.handler = async (event) => {
       cmd = body
     }
   }
-  
+
   let response = {
     statusCode: 200,
     headers: {
@@ -134,6 +142,14 @@ exports.handler = async (event) => {
       if (cmd.params && cmd.params.length) {
         let snapshots = await handleListSnapshots(cmd.params[0])
         response.body = JSON.stringify(snapshots)
+      } else {
+        response.body = JSON.stringify({code: 10001, data: "invalid params"})
+      }
+      break
+    case 'get-info':
+      if (cmd.params && cmd.params.length) {
+        let info = await handleGetInfo(cmd.params[0])
+        response.body = JSON.stringify(info)
       } else {
         response.body = JSON.stringify({code: 10001, data: "invalid params"})
       }

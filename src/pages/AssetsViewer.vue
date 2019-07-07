@@ -90,7 +90,7 @@ export default {
   font-size: 12px;
 }
 .calculator {
-  width: 320px; 
+  width: 320px;
 }
 .asset-cell {
   /* border-bottom: 1px solid #eee; */

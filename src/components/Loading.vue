@@ -1,6 +1,6 @@
 <template>
   <div class="mask" :class="{'full-screen': fullscreen, 'is-loading': loading}">
-    <van-loading v-if="loading" type="spinner"  color="white"  class="loading"/>
+    <van-loading v-if="loading" type="spinner"  color="rgb(59, 186, 222)"  class="loading"/>
     <slot />
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
     transform: translate(-50%, -50%);
     z-index: 1;
     padding: 10px;
-    background: rgba(0, 0, 0, 0.8);
+    // background: rgba(0, 0, 0, 0.8);
     border-radius: 3px;
   }
 }

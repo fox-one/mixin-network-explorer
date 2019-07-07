@@ -1,37 +1,10 @@
 <template>
   <section class="content">
-    <div class="page-top">
-      <h1 class="title page-title">Mixin Network Explorer</h1>
-      <div class="entry-wrapper">
-        <van-field placeholder="Snapshot id, Account token"
-          left-icon="search"
-          v-model="searchValue"
-        ></van-field>
-        <van-button type="info" @click="doSearch">Search</van-button>
-      </div>
-    </div>
-    <div class="nodelist-title section-title">Planning Nodes: 4</div>
-    <div class="nodelist">
-      <template v-for="mgr in managers">
-        <div class="node-wrapper">
-          <div class="empty-node">
-            <a @click="viewMgr(mgr, $event)" class="node-mgr" :class="mgr.class" >
-              <span class="circle">
-                <span class="outer-circle"></span>
-                <span class="inner-circle"></span>
-              </span>
-              <img class="node-mgr-icon" :src="mgr.icon" />
-              <span class="node-mgr-name">{{mgr.name}}</span>
-            </a>
-          </div>
-        </div>
-      </template>
-    </div>
     <div class="nodelist-title section-title">{{'Online Nodes: ' + onlineMixinNodes.length}}</div>
     <div class="nodelist">
       <template v-if="onlineMixinNodes.length !== 0">
         <div class="node-wrapper" v-for="node in onlineMixinNodes">
-          <node :data="node"></node>
+          <node :data="node" shape="default" @click-item="openNodeDetail(node)"></node>
         </div>
       </template>
       <template v-else>
@@ -44,7 +17,7 @@
     <div class="nodelist">
       <template v-if="offlineMixinNodes.length !== 0">
         <div class="node-wrapper" v-for="node in offlineMixinNodes">
-          <node :data="node"></node>
+          <node :data="node" @click-item="openNodeDetail(node)"></node>
         </div>
       </template>
       <template v-else>
@@ -62,6 +35,7 @@
 <script>
 import { Tabbar, TabbarItem } from 'vant'
 import Node from '@/components/Node'
+import Store from '@/service/store'
 import axios from 'axios'
 
 export default {
@@ -69,9 +43,9 @@ export default {
     Node,
   },
   async mounted () {
-    let result = await axios.get('https://node.f1ex.io/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
-    result = result.data
-    // let result = require('../../public/mocking.json')
+    // let result = await axios.get('https://node.f1ex.io/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
+    // result = result.data
+    let result = require('../../public/mocking.json')
     let nodes = []
     let max = 0
     let min = Number.MAX_SAFE_INTEGER
@@ -99,9 +73,12 @@ export default {
         } else {
           node.level = 2
         }
+        node.myCache = this.getMyCacheItem(node)
+        node.id = node.stat.data.node
         nodes.push(node)
       }
     }
+    Store.setNodes(nodes)
     this.nodes = nodes
     this.updatedAt = new Date(result.updatedAt).toLocaleString()
   },
@@ -153,16 +130,31 @@ export default {
       }
     },
     doSearch () {
-      var searchValue = this.searchValue.trim()
+      let searchValue = this.searchValue.trim()
       if (/^.{8}-.{4}-.{4}-.{4}-.{12}$/.test(searchValue)) {
         // snapshot id
-        window.location.href = `https://mixin.one/snapshots/${searchValue}`      
-      } else if (/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.[a-zA-Z0-9\-_]+$/.test(searchValue)) { 
+        window.location.href = `https://mixin.one/snapshots/${searchValue}`
+      } else if (/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.[a-zA-Z0-9\-_]+$/.test(searchValue)) {
         // token
         this.$router.push('/tools/assets-viewer?token=' + encodeURIComponent(this.searchValue))
       } else {
         alert('unsupported query')
       }
+    },
+    getMyCacheItem(node) {
+      let cache = node.stat.data.graph.cache
+      let myNodeHash = node.stat.data.node
+      if (cache) {
+        for (const key in cache) {
+          if (cache.hasOwnProperty(key) && key === myNodeHash) {
+            return cache[key]
+          }
+        }
+      }
+      return null
+    },
+    openNodeDetail(node) {
+      this.$router.push(`/nodes/${node.id}`)
     }
   }
 }
@@ -188,7 +180,7 @@ export default {
 }
 .node-wrapper {
   float: left;
-  margin: 2px;
+  margin: 4px;
 }
 
 .empty-node {
@@ -198,9 +190,10 @@ export default {
 .empty-node .node-mgr {
   background: white;
   flex: 1;
-  box-shadow: 0 1px 0 0 rgb(92, 198, 255), 0 0px 3px 0 rgba(92, 198, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 2px 0 0 rgb(92, 198, 255), 0 0px 3px 0 rgba(92, 198, 255, 0.2);
   position: relative;
-  width: 84px;
+  width: 80px;
 }
 .empty-node .node-mgr:last-child {
   margin-right: 0px;
@@ -221,50 +214,7 @@ export default {
   padding: 8px 0;
   font-size: 14px;
   color: rgba(0,0,0,0.6);
-  background: rgba(196, 148, 148, 0.08);
   text-align: center;
-}
-.empty-node .node-mgr.flicker .circle {
-  /* animation: rotatecircle 4s linear; */
-  display: none;
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  margin-left: -25px;
-  background: #fff;
-  border-radius: 99em;
-  height: 48px;
-  width: 48px;
-}
-.empty-node .node-mgr.flicker .outer-circle {
-  background-color: transparent;
-  border: 4px solid rgba(0, 187, 255, 0.2);
-  opacity: .9;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
-  border-radius: 99em;
-  width: 56px;
-  height: 56px;
-  position: absolute;
-  margin-top: -3px;
-  margin-left: -3px;
-  display: block;
-  /* animation: spinPulse 3s infinite ease-in-out; */
-  display: none;
-}
-.empty-node .node-mgr.flicker .inner-circle {
-  background-color: transparent;
-  border: 1px solid rgba(0, 187, 255, 0.6);
-  opacity: .9;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-radius: 99em;
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  /* animation: spinoffPulse 1s infinite linear; */
 }
 
 .footer {

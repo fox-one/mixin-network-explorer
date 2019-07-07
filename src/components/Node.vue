@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import UtilsFn from '@/utils/fn'
 
 export default {
   props: {
@@ -72,10 +73,6 @@ export default {
     }
   },
   methods: {
-    formatTs (ts) {
-      let now = Date.now() * 1000000
-      return ((now - ts)/1000000000).toFixed(0) + 'ms'
-    },
     async toggle () {
       if (this.StatData === null) {
         return
@@ -95,7 +92,8 @@ export default {
     },
     clickItem () {
       this.$emit('click-item', this.data)
-    }
+    },
+    formatTs: UtilsFn.FormatTs
   }
 }
 </script>

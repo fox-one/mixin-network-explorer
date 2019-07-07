@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Toast } from 'vant';
 
 const instance = axios.create({
-  baseURL: 'https://mixin-net-proxy.fox.one',
+  baseURL: 'https://proxy.mixin.network',
   timeout: 10000,
   responseType: 'json',
   withCredentials: false,

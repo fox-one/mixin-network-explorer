@@ -82,7 +82,7 @@ export default {
   },
   async mounted () {
     this.pageLoading = true
-    let result = await axios.get('https://node.f1ex.io/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
+    let result = await axios.get('https://mixin.network/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
     result = result.data
     // let result = require('../../public/mocking.json')
     let nodes = []

@@ -100,6 +100,8 @@ export default {
 
 
 <style scoped lang="scss">
+@import "../assets/scss/colors.scss";
+
 .node {
   text-align: left;
   background: #fff;

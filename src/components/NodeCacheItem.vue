@@ -17,7 +17,7 @@
         </tr>
         <tr>
           <td>Timestamp</td>
-          <td>{{cacheItem.timestamp}} ({{FormatTs(cacheItem.timestamp)}})</td>
+          <td :class="CacheLevel(cacheItem.timestamp)">{{cacheItem.timestamp}} ({{FormatTs(cacheItem.timestamp)}})</td>
         </tr>
         <tr>
           <td>References</td>
@@ -41,12 +41,15 @@ export default {
     }
   },
   methods: {
+    CacheLevel: UtilsFn.CacheLevel,
     FormatTs: UtilsFn.FormatTs
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/scss/colors.scss";
+
 .node-cache-item {
   margin: 10px 15px;
   box-shadow: 0 2px 0 0 rgb(92, 198, 255), 0 3px 10px 0 rgba(92, 198, 255, 0.2), 0 0px 1px 0 rgba(92, 198, 255, 0.4);
@@ -56,6 +59,15 @@ export default {
     td {
       border-top: none;
     }
+  }
+  .level-0 {
+    color: #00b435;
+  }
+  .level-1 {
+    color: rgb(255, 136, 0);
+  }
+  .level-2 {
+    color: rgb(136, 0, 7);
   }
 }
 </style>

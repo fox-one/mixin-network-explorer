@@ -1,8 +1,22 @@
 <template>
   <van-panel title="Cache Items" :desc="myCacheItemDisplay">
+    <div class="panel-header" slot="header">
+      <div class="panel-header-left">
+        <div class="panel-title">
+          Cache Items
+        </div>
+        <div class="panel-desc">
+          {{ myCacheItemDisplay }}
+        </div>
+      </div>
+      <div class="panel-header-right">
+        <span style="margin-right: 10px;">Hide normal nodes</span>
+        <van-switch v-model="onlySlowNodesCheck" size="20px" title="Only slow nodes" />
+      </div>
+    </div>
     <div class="panel-body">
       <node-cache-item
-        v-for="cacheItem of node.graph.cache"
+        v-for="cacheItem in filteredNodeCacheItems"
         v-bind:key="cacheItem.node"
         :meta="getNodeMeta(cacheItem)"
         :cacheItem="cacheItem"
@@ -12,15 +26,18 @@
 </template>
 
 <script>
+import { Switch } from 'vant'
 import NodeCacheItem from '@/components/NodeCacheItem'
 import UtilsFn from '@/utils/fn'
 export default {
   props: ['node', 'metaMap'],
   components: {
-    'node-cache-item': NodeCacheItem
+    'node-cache-item': NodeCacheItem,
+    'van-switch': Switch
   },
   data () {
     return {
+      onlySlowNodesCheck: false
     }
   },
   computed: {
@@ -36,6 +53,18 @@ export default {
       }
       return '0 (0ms)'
     },
+    filteredNodeCacheItems () {
+      const items = []
+      for (const key in this.node.graph.cache) {
+        items.push(this.node.graph.cache[key])
+      }
+      if (this.onlySlowNodesCheck) {
+        return items.filter(x => {
+          return UtilsFn.CacheLevel(x.timestamp) !== 'level-0'
+        })
+      }
+      return items
+    }
   },
   methods: {
     getNodeMeta(node) {

@@ -142,6 +142,34 @@ a {
   display: block;
 }
 
+.panel-header {
+  padding: 15px;
+  display: flex;
+  .panel-header-left {
+    flex: 3;
+  }
+  .panel-header-right {
+    font-size: 12px;
+    opacity: 0.6;
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    & > * {
+      padding: 0;
+    }
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 500px;
+    margin-bottom: 4px;
+  }
+  .panel-desc {
+    font-size: 12px;
+    opacity: 0.6;
+  }
+}
+
 table {
   width: 100%;
   font-size: 13px;

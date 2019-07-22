@@ -43,9 +43,9 @@ export default {
     Node,
   },
   async mounted () {
-    // let result = await axios.get('https://node.f1ex.io/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
-    // result = result.data
-    let result = require('../../public/mocking.json')
+    let result = await axios.get('https://mixin.network/mixin-nodes-stat.json?id=' + (Date.now() + Math.random()))
+    result = result.data
+    // let result = require('../../public/mocking.json')
     let nodes = []
     let max = 0
     let min = Number.MAX_SAFE_INTEGER
@@ -154,7 +154,7 @@ export default {
       return null
     },
     openNodeDetail(node) {
-      this.$router.push(`/nodes/${node.id}`)
+      // this.$router.push(`/nodes/${node.id}`)
     }
   }
 }

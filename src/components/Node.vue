@@ -2,8 +2,13 @@
   <div v-if="data" class="node" :class="nodeCls" @click="clickItem">
     <div class="node-info">
       <div class="node-info-top">
-        <a v-if="StatData" class="version" :href="'//github.com/MixinNetwork/mixin/commit/' + StatData.version">{{StatData.version.slice(0, 6)}}</a>
-        <div class="name">{{data.name}}</div>
+        <a
+          v-if="StatData"
+          class="version"
+          :href="'//github.com/MixinNetwork/mixin/commit/' + statVer[1]"
+          >{{ statVer[0] }}</a
+        >
+        <div class="name">{{ data.name }}</div>
       </div>
       <div class="key-metrics">
         <div class="key-metric topology" :class="'level-' + data.level">
@@ -11,7 +16,7 @@
             Topology
           </div>
           <div class="key-metric-value">
-            {{StatData ? StatData.graph.topology : '??'}}
+            {{ StatData ? StatData.graph.topology : "??" }}
           </div>
         </div>
         <div class="key-metric cache">
@@ -19,7 +24,11 @@
             Round
           </div>
           <div class="key-metric-value">
-            {{myCache ? `${myCache.round}(${formatTs(myCache.timestamp)})` : '??'}}
+            {{
+              myCache
+                ? `${myCache.round}(${formatTs(myCache.timestamp)})`
+                : "??"
+            }}
           </div>
         </div>
       </div>
@@ -28,74 +37,91 @@
 </template>
 
 <script>
-import UtilsFn from '@/utils/fn'
+import UtilsFn from "@/utils/fn";
 
 export default {
   props: {
     data: {
-      name: '',
-      host: '',
-      test: '',
-      stat: {},
+      name: "",
+      host: "",
+      test: "",
+      stat: {}
     },
     shape: {
       type: String,
-      default: 'list-item'
-    },
+      default: "list-item"
+    }
   },
-  data () {
+  data() {
     return {
       toggleTechieDetails: false,
       lastSnapshots: []
-    }
+    };
   },
   computed: {
-    nodeCls () {
-      let cls = []
-      cls.push(this.isActive ? 'active' : '')
-      cls.push(this.shape)
-      return cls.join(' ')
+    nodeCls() {
+      let cls = [];
+      cls.push(this.isActive ? "active" : "");
+      cls.push(this.shape);
+      return cls.join(" ");
     },
     isActive() {
       if (this.StatData) {
-        return true
+        return true;
       }
-      return false
+      return false;
     },
     StatData() {
-      if (this.data.stat && this.data.stat.code === 0 && this.data.stat.data.version) {
-        return this.data.stat.data
+      if (
+        this.data.stat &&
+        this.data.stat.code === 0 &&
+        this.data.stat.data.version
+      ) {
+        return this.data.stat.data;
       }
-      return null
+      return null;
     },
-    myCache () {
-      return this.data.myCache
+    statVer() {
+      if (this.StatData) {
+        try {
+          return this.StatData.version.split("-");
+        } catch (e) {
+          return ["??"][""];
+        }
+      }
+      return ["??"][""];
+    },
+    myCache() {
+      return this.data.myCache;
     }
   },
   methods: {
-    async toggle () {
+    async toggle() {
       if (this.StatData === null) {
-        return
+        return;
       }
-      this.toggleTechieDetails = !this.toggleTechieDetails
+      this.toggleTechieDetails = !this.toggleTechieDetails;
       if (this.toggleTechieDetails) {
-        const result = await axios.post('https://1r7l1xqqj5.execute-api.ap-northeast-1.amazonaws.com/prod/MixinNetworkMonitor', {
-          "op":"get-topsnapshots",
-          "params": [this.data.host]
-        })
-        this.lastSnapshots = result.map((x) => {
-          x.meta = this.getTransObject(x)
-          return x
-        })
-        this.lastSnapshots.reverse()
+        const result = await axios.post(
+          "https://1r7l1xqqj5.execute-api.ap-northeast-1.amazonaws.com/prod/MixinNetworkMonitor",
+          {
+            op: "get-topsnapshots",
+            params: [this.data.host]
+          }
+        );
+        this.lastSnapshots = result.map(x => {
+          x.meta = this.getTransObject(x);
+          return x;
+        });
+        this.lastSnapshots.reverse();
       }
     },
-    clickItem () {
-      this.$emit('click-item', this.data)
+    clickItem() {
+      this.$emit("click-item", this.data);
     },
     formatTs: UtilsFn.FormatTs
   }
-}
+};
 </script>
 
 
@@ -105,7 +131,7 @@ export default {
 .node {
   text-align: left;
   background: #fff;
-  box-shadow: 0 1px 0 0 rgba(0,0,0,0.3), 0 0px 3px 0 rgba(0,0,0,0.06);
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.3), 0 0px 3px 0 rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   width: 110px;
@@ -117,7 +143,8 @@ export default {
     transition: all 0.2s ease;
   }
   &.active:hover {
-    box-shadow: 0 2px 0 0 rgb(92, 198, 255), 0 3px 10px 0 rgba(92, 198, 255, 0.2);
+    box-shadow: 0 2px 0 0 rgb(92, 198, 255),
+      0 3px 10px 0 rgba(92, 198, 255, 0.2);
   }
 }
 .node-info {
@@ -143,7 +170,7 @@ export default {
 
 .key-metrics {
   font-size: 10px;
-  color: rgba(0,0,0,0.3);
+  color: rgba(0, 0, 0, 0.3);
   .key-metric {
     &:last-child {
       border-bottom: none;
@@ -152,7 +179,7 @@ export default {
       padding: 0px 6px 0px 6px;
       margin: 0 0 2px 0px;
       display: inline-block;
-      color: rgba(0,0,0,0.4);
+      color: rgba(0, 0, 0, 0.4);
     }
     .key-metric-value {
       padding: 0px 6px 0px 6px;
@@ -173,7 +200,7 @@ export default {
   display: flex;
   .node-info-top {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
   }
 }
 .name {
@@ -188,17 +215,24 @@ export default {
   text-align: left;
   font-size: 10px;
   display: block;
-  color: rgba(0,0,0,0.3);
-  font-family: 'Roboto Mono', 'Operator Mono', 'SF Mono', 'Menlo', 'Courier', Courier, monospace;
+  color: rgba(0, 0, 0, 0.3);
+  font-family: "Roboto Mono", "Operator Mono", "SF Mono", "Menlo", "Courier",
+    Courier, monospace;
 }
 .text {
   font-size: 13px;
   opacity: 0.6;
 }
-.addr, .topology {
+.addr,
+.topology {
   flex: 1;
 }
 @keyframes breathe {
-  from { opacity: 0.2; } to { opacity: 1; }
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

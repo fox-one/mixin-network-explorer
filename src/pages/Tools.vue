@@ -14,6 +14,8 @@
       <van-cell-group title="Assists" class="cell-group">
         <van-cell title="Generate Assets Public Token" is-link @click="openAssist()">
         </van-cell>
+        <van-cell title="Assets Viewer" is-link @click="openAssetsViewer()">
+        </van-cell>
       </van-cell-group>
     </div>
   </section>
@@ -34,6 +36,9 @@ export default {
     openAssist(name) {
       this.$router.push({path: '/tools/assist/' })
     },
+    openAssetsViewer() {
+      this.$router.push({path: '/tools/assets-viewer/' })
+    }
   }
 }
 
@@ -49,6 +54,6 @@ export default {
   font-size: 12px;
 }
 .calculator {
-  width: 320px; 
+  width: 320px;
 }
 </style>

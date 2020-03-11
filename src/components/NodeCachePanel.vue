@@ -6,7 +6,9 @@
           Cache Items
         </div>
         <div class="panel-desc">
-          {{ myCacheItemDisplay }}
+          Cache rounds: {{ myCacheItemDisplay }}
+          <br/>
+          Queue caches: {{ myQueueCacheItemDisplay }}
         </div>
       </div>
       <div class="panel-header-right">
@@ -52,6 +54,9 @@ export default {
         }
       }
       return '0 (0ms)'
+    },
+    myQueueCacheItemDisplay () {
+      return this.node.queue.caches
     },
     filteredNodeCacheItems () {
       const items = []

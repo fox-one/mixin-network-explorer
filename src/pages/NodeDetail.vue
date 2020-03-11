@@ -104,7 +104,7 @@ export default {
       'params': [ node.host ]
     })
     this.node.stat.data = resp.data
-    console.log(this.node.stat.data.graph)
+    // console.log(this.node.stat.data.graph)
     this.cacheItems = this.getCacheItems(this.node)
     // get topsnapshots
     resp = await axios.post('https://1r7l1xqqj5.execute-api.ap-northeast-1.amazonaws.com/prod/MixinNetworkMonitor', {

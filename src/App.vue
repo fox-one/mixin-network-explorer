@@ -8,7 +8,7 @@
         <van-tab title="Info"></van-tab>
       </van-tabs>
     </div>
-    <div class="app-container">
+    <div class="app-container" :class="isMainPage ? 'padding': ''">
       <router-view></router-view>
     </div>
   </div>
@@ -83,7 +83,7 @@ a {
   box-shadow: 0 0 0 1px rgba(0,0,0, 0.1);
 }
 
-.app-container {
+.app-container.padding {
   padding-top: 44px;
 }
 

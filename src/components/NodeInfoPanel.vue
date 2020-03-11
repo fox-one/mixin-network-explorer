@@ -20,6 +20,10 @@
             <td>{{node.uptime}}</td>
           </tr>
           <tr>
+            <td>Timestamp</td>
+            <td>{{node.timestamp}}</td>
+          </tr>
+          <tr>
             <td>Version</td>
             <td>{{node.version}}</td>
           </tr>

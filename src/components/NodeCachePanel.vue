@@ -22,6 +22,7 @@
         v-bind:key="cacheItem.node"
         :meta="getNodeMeta(cacheItem)"
         :cacheItem="cacheItem"
+        :is-removed="isRemoved(cacheItem.node)"
       />
     </div>
   </van-panel>
@@ -60,18 +61,27 @@ export default {
     },
     filteredNodeCacheItems () {
       const items = []
+      const removed = []
       for (const key in this.node.graph.cache) {
-        items.push(this.node.graph.cache[key])
+        const item = this.node.graph.cache[key]
+        if (this.isRemoved(item.node)) {
+          removed.push(item)
+        } else {
+          items.push(item)
+        }
       }
       if (this.onlySlowNodesCheck) {
         return items.filter(x => {
           return UtilsFn.CacheLevel(x.timestamp) !== 'level-0'
         })
       }
-      return items
+      return items.concat(removed)
     }
   },
   methods: {
+    isRemoved (id) {
+      return (id in this.metaMap)
+    },
     getNodeMeta(node) {
       if (this.metaMap && node) {
         if (this.metaMap.hasOwnProperty(node.node)) {

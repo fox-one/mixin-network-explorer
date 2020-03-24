@@ -1,5 +1,5 @@
 <template>
-  <div class="node-cache-item">
+  <div class="node-cache-item" :class="isRemoved ? 'removed' : '' ">
     <table>
       <thead>
         <tr>
@@ -35,7 +35,7 @@
 import UtilsFn from '@/utils/fn'
 
 export default {
-  props: ['cacheItem', 'meta'],
+  props: ['cacheItem', 'meta', 'isRemoved'],
   data () {
     return {
     }
@@ -50,6 +50,17 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/scss/colors.scss";
 
+.node-cache-item.removed {
+  box-shadow: 0 2px 0 0 #e8e8e8, 0 3px 10px 0 rgba(123, 123, 123, 0.2), 0 0px 1px 0 rgba(166, 166, 166, 0.4);
+  tr {
+    td:last-child {
+      color: #aaa !important;
+      a {
+        color: #aaa !important;
+      }
+    }
+  }
+}
 .node-cache-item {
   margin: 10px 15px;
   box-shadow: 0 2px 0 0 rgb(92, 198, 255), 0 3px 10px 0 rgba(92, 198, 255, 0.2), 0 0px 1px 0 rgba(92, 198, 255, 0.4);
@@ -60,14 +71,18 @@ export default {
       border-top: none;
     }
   }
-  .level-0 {
-    color: #00b435;
-  }
-  .level-1 {
-    color: rgb(255, 136, 0);
-  }
-  .level-2 {
-    color: rgb(136, 0, 7);
+  tr {
+    td {
+      &.level-0 {
+        color: #00b435;
+      }
+      &.level-1 {
+        color: rgb(255, 136, 0);
+      }
+      &.level-2 {
+        color: rgb(136, 0, 7);
+      }
+    }
   }
 }
 </style>

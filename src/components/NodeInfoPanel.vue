@@ -1,5 +1,5 @@
 <template>
-  <van-panel :title="'Node: ' + nodeMeta.name">
+  <van-panel :title="'Node: ' + (nodeMeta.name || 'Unknown Node')">
     <div class="panel-body">
       <table>
         <tbody>

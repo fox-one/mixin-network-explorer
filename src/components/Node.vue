@@ -8,7 +8,8 @@
           :href="'//github.com/MixinNetwork/mixin/commit/' + statVer[1]"
           >{{ statVer[0] }}</a
         >
-        <div class="name">{{ data.name }}</div>
+        <span v-else class="version">v?.?.?</span>
+        <div class="name">{{ data.host }}</div>
       </div>
       <div class="key-metrics">
         <div class="key-metric topology" :class="'level-' + data.level">
@@ -45,17 +46,17 @@ export default {
       name: "",
       host: "",
       test: "",
-      stat: {}
+      stat: {},
     },
     shape: {
       type: String,
-      default: "list-item"
-    }
+      default: "list-item",
+    },
   },
   data() {
     return {
       toggleTechieDetails: false,
-      lastSnapshots: []
+      lastSnapshots: [],
     };
   },
   computed: {
@@ -93,37 +94,13 @@ export default {
     },
     myCache() {
       return this.data.myCache;
-    }
+    },
   },
   methods: {
-    async toggle() {
-      if (this.StatData === null) {
-        return;
-      }
-      this.toggleTechieDetails = !this.toggleTechieDetails;
-      if (this.toggleTechieDetails) {
-        const result = await axios.post(
-          "https://1r7l1xqqj5.execute-api.ap-northeast-1.amazonaws.com/prod/MixinNetworkMonitor",
-          {
-            op: "get-topsnapshots",
-            params: [this.data.host]
-          }
-        );
-        this.lastSnapshots = result.map(x => {
-          x.meta = this.getTransObject(x);
-          return x;
-        });
-        this.lastSnapshots.reverse();
-      }
-    },
-    clickItem() {
-      this.$emit("click-item", this.data);
-    },
-    formatTs: UtilsFn.FormatTs
-  }
+    formatTs: UtilsFn.FormatTs,
+  },
 };
 </script>
-
 
 <style scoped lang="scss">
 @import "../assets/scss/colors.scss";
@@ -134,8 +111,8 @@ export default {
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.3), 0 0px 3px 0 rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  width: 110px;
-  height: 126px;
+  width: 220px;
+  height: 110px;
   border-radius: 10px;
   position: relative;
   &.active {
@@ -145,6 +122,9 @@ export default {
   &.active:hover {
     box-shadow: 0 2px 0 0 rgb(92, 198, 255),
       0 3px 10px 0 rgba(92, 198, 255, 0.2);
+  }
+  @media (max-width: 500px) {
+    width: 100% !important;
   }
 }
 .node-info {
@@ -206,12 +186,11 @@ export default {
 .name {
   flex: 1;
   color: rgb(59, 186, 222);
-  margin-bottom: 6px;
   font-size: 12px;
   padding: 4px 6px;
 }
 .version {
-  padding: 4px 6px;
+  padding: 6px 6px 2px 6px;
   text-align: left;
   font-size: 10px;
   display: block;

@@ -11,9 +11,14 @@
     <loading :loading="pageLoading">
       <div class="page-content">
         <van-cell-group v-if="curNode" class="node-dropdown">
-          <van-cell title="Select Nodes" is-link arrow-direction="down" @click="popupNodes">
-            <span class="major">{{curNodeMeta.name}}</span>
-            <span class="minor">{{curNode.node}}</span>
+          <van-cell
+            title="Select Nodes"
+            is-link
+            arrow-direction="down"
+            @click="popupNodes"
+          >
+            <span class="major">{{ curNodeMeta.name }}</span>
+            <span class="minor">{{ curNode.node }}</span>
           </van-cell>
         </van-cell-group>
 
@@ -33,7 +38,11 @@
                 :class="nodeSelectedState[node.id] ? 'selected' : ''"
                 v-for="node in onlineMixinNodes"
               >
-                <node :data="node" shape="list-item" @click-item="openNodeDetail(node)"></node>
+                <node
+                  :data="node"
+                  shape="list-item"
+                  @click-item="openNodeDetail(node)"
+                ></node>
               </div>
             </template>
             <template v-else>
@@ -63,7 +72,7 @@
 </template>
 
 <script>
-import { Search, Popup } from "vant";
+import { Search } from "vant";
 import Node from "@/components/Node";
 import Loading from "@/components/Loading";
 import NodeInfoPanel from "@/components/NodeInfoPanel";
@@ -71,7 +80,6 @@ import NodeCachePanel from "@/components/NodeCachePanel";
 import Store from "@/service/store";
 import NetworkService from "@/service/network";
 import axios from "axios";
-import VueScrollTo from "vue-scrollto";
 
 export default {
   components: {
@@ -79,7 +87,7 @@ export default {
     Loading,
     "van-search": Search,
     "node-info-panel": NodeInfoPanel,
-    "node-cache-panel": NodeCachePanel
+    "node-cache-panel": NodeCachePanel,
   },
   async mounted() {
     this.pageLoading = true;
@@ -123,7 +131,7 @@ export default {
           id: node.id,
           host: node.host,
           name: node.name,
-          signer: node.signer
+          signer: node.signer,
         };
         nodes.push(node);
       }
@@ -146,19 +154,19 @@ export default {
       filterNodeValue: "",
       curNode: null,
       pageLoading: false,
-      popupNodeState: false
+      popupNodeState: false,
     };
   },
   computed: {
     onlineMixinNodes() {
       var nodes = this.nodes.filter(
-        x => x.stat.code === 0 && x.stat.data.version
+        (x) => x.stat.code === 0 && x.stat.data.version
       );
       nodes.sort((a, b) => {
         return a.name > b.name ? 1 : -1;
       });
       if (this.filterNodeValue) {
-        nodes = nodes.filter(x => {
+        nodes = nodes.filter((x) => {
           return (
             x.name.toLowerCase().indexOf(this.filterNodeValue.toLowerCase()) !==
               -1 ||
@@ -178,11 +186,11 @@ export default {
       return {};
     },
     popupNodeList() {
-      return this.onlineMixinNodes.map(x => {
+      return this.onlineMixinNodes.map((x) => {
         x.text = x.name;
         return x;
       });
-    }
+    },
   },
   methods: {
     doSearch() {
@@ -241,11 +249,11 @@ export default {
       }
       this.nodeSelectedState[node.id] = true;
     },
-    onPopupNodeSelectConfirm(selected, ix) {
+    onPopupNodeSelectConfirm(selected) {
       this.popupNodeState = false;
       this.openNodeDetail(selected);
-    }
-  }
+    },
+  },
 };
 </script>
 

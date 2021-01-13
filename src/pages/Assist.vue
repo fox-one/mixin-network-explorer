@@ -11,7 +11,7 @@
       <div class="hint">Generate Public Access Tokens for your account.</div>
       <div class="panel">
         <van-row style="padding: 10px;">
-          <van-button type="info" style="width: 100%" @click="generate">Generate Token for Messenger</van-button>        
+          <van-button type="info" style="width: 100%" @click="generate">Generate Token for Messenger</van-button>
         </van-row>
       </div>
       <div class="panel">
@@ -19,7 +19,7 @@
           <pre class="public-access-token"><code v-show="tokenGenerated" ref="token">{{tokenGenerated}}</code><span v-show="tokenGenerated.length === 0" class="hint">Tap "Generate" to generate token</span></pre>
         </van-row>
         <van-row style="padding: 10px;">
-          <van-button type="info" plain style="width: 100%" @click="copyToken">Copy Public Access Token</van-button>        
+          <van-button type="info" plain style="width: 100%" @click="copyToken">Copy Public Access Token</van-button>
         </van-row>
       </div>
       <div class="section-title">Revoke Token</div>
@@ -29,7 +29,7 @@
           <van-field placeholder="Your token here." v-model="tokenToRevoke"></van-field>
         </van-row>
         <van-row style="padding: 10px;">
-          <van-button type="danger" style="width: 100%" @click="revoke">Revoke Token</van-button>        
+          <van-button type="danger" style="width: 100%" @click="revoke">Revoke Token</van-button>
         </van-row>
       </div>
     </section>
@@ -65,6 +65,7 @@ export default {
       utils.copyEl(this.$refs.token)
     },
     generate () {
+      localStorage.removeItem('token')
       MixinService.getAssets().then(res => {
         this.tokenGenerated = localStorage.getItem('token')
       })
@@ -87,7 +88,7 @@ export default {
   font-size: 12px;
 }
 .calculator {
-  width: 320px; 
+  width: 320px;
 }
 .public-access-token {
   background: #fafafa;

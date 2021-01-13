@@ -1,21 +1,33 @@
 <template>
   <section class="content">
-    <div class="nodelist-title section-title">{{'Online Nodes: ' + onlineMixinNodes.length}}</div>
+    <div class="nodelist-title section-title">
+      {{ "Online Nodes: " + onlineMixinNodes.length }}
+    </div>
     <div class="nodelist">
       <template v-if="onlineMixinNodes.length !== 0">
-        <div class="node-wrapper" v-for="node in onlineMixinNodes">
-          <node :data="node" shape="default" @click-item="openNodeDetail(node)"></node>
+        <div
+          class="node-wrapper"
+          v-for="(node, idx) in onlineMixinNodes"
+          :key="'online-' + idx"
+        >
+          <node :data="node" shape="default"></node>
         </div>
       </template>
       <template v-else>
         <div class="hint">None.</div>
       </template>
     </div>
-    <div class="nodelist-title section-title">{{"Can't be reached: " + offlineMixinNodes.length}}</div>
+    <div class="nodelist-title section-title">
+      {{ "Can't be reached: " + offlineMixinNodes.length }}
+    </div>
     <div class="nodelist">
       <template v-if="offlineMixinNodes.length !== 0">
-        <div class="node-wrapper" v-for="node in offlineMixinNodes">
-          <node :data="node" shape="default" @click-item="openNodeDetail(node)"></node>
+        <div
+          class="node-wrapper"
+          v-for="(node, idx) in offlineMixinNodes"
+          :key="'offline-' + idx"
+        >
+          <node :data="node" shape="default"></node>
         </div>
       </template>
       <template v-else>
@@ -23,20 +35,19 @@
       </template>
     </div>
     <div class="footer">
-      <div class="datetime">Last updated: {{updatedAt}}</div>
+      <div class="datetime">Last updated: {{ updatedAt }}</div>
     </div>
   </section>
 </template>
 
 <script>
-import { Tabbar, TabbarItem } from "vant";
 import Node from "@/components/Node";
 import Store from "@/service/store";
 import axios from "axios";
 
 export default {
   components: {
-    Node
+    Node,
   },
   async mounted() {
     let result = await axios.get(
@@ -44,7 +55,7 @@ export default {
         (Date.now() + Math.random())
     );
     result = result.data;
-    // let result = require('../../public/mocking.json')
+    // let result = require("../../public/mocking.json");
     let nodes = [];
     let max = 0;
     let min = Number.MAX_SAFE_INTEGER;
@@ -86,38 +97,15 @@ export default {
   data() {
     return {
       nodes: [],
-      managers: [
-        {
-          name: "F1EX",
-          icon: require("@/assets/images/f1ex.png"),
-          link: "7000101948",
-          class: "flicker"
-        },
-        {
-          name: "B1",
-          icon: require("@/assets/images/b1.png"),
-          link: "https://b1.run/mixin"
-        },
-        {
-          name: "ExinPool",
-          icon: require("@/assets/images/exinpool.png"),
-          mixinId: "7000101761"
-        },
-        {
-          name: "SS",
-          icon: require("@/assets/images/ss.png"),
-          mixinId: "7000101762"
-        }
-      ],
       updatedAt: new Date(),
       searchValue: "",
-      offlineNodes: []
+      offlineNodes: [],
     };
   },
   computed: {
     onlineMixinNodes() {
       var nodes = this.nodes.filter(
-        x => x.stat.code === 0 && x.stat.data.version
+        (x) => x.stat.code === 0 && x.stat.data.version
       );
       nodes.sort((a, b) => {
         return a.name > b.name ? 1 : -1;
@@ -126,10 +114,10 @@ export default {
     },
     offlineMixinNodes() {
       var nodes = this.nodes.filter(
-        x => x.stat.code !== 0 || !x.stat.data.hasOwnProperty("version")
+        (x) => x.stat.code !== 0 || !x.stat.data.hasOwnProperty("version")
       );
       return nodes;
-    }
+    },
   },
   methods: {
     viewMgr(mgr, evt) {
@@ -168,10 +156,7 @@ export default {
       }
       return null;
     },
-    openNodeDetail(node) {
-      // this.$router.push(`/nodes/${node.id}`)
-    }
-  }
+  },
 };
 </script>
 
@@ -183,7 +168,7 @@ export default {
   background: #fff;
 }
 .content {
-  max-width: 1000px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 .nodelist {
@@ -192,10 +177,13 @@ export default {
   width: 100%;
   padding: 0 10px;
   margin: 0 auto;
+  @media (max-width: 500px) {
+    display: block;
+  }
 }
 .node-wrapper {
-  float: left;
-  margin: 4px;
+  // float: left;
+  margin: 4px 4px 8px 4px;
 }
 
 .empty-node {

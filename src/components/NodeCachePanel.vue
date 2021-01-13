@@ -40,10 +40,18 @@ export default {
   },
   data () {
     return {
-      onlySlowNodesCheck: false
+      onlySlowNodesCheck: false,
     }
   },
   computed: {
+    consensusMap () {
+      const ret = {}
+      for (let ix = 0; ix < this.node.graph.consensus.length; ix++) {
+        const consensus = this.node.graph.consensus[ix];
+        ret[consensus.node] = 1
+      }
+      return ret
+    },
     myCacheItemDisplay () {
       let cache = this.node.graph.cache
       let myNodeHash = this.node.node
@@ -80,7 +88,7 @@ export default {
   },
   methods: {
     isRemoved (id) {
-      return (id in this.metaMap)
+      return !this.consensusMap.hasOwnProperty(id)
     },
     getNodeMeta(node) {
       if (this.metaMap && node) {

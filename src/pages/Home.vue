@@ -96,7 +96,7 @@ export default {
         (Date.now() + Math.random())
     );
     result = result.data;
-    // let result = require('../../public/mocking.json')
+    // let result = require("../../public/mixin-nodes-stat.json");
     let nodes = [];
     let max = 0;
     let min = Number.MAX_SAFE_INTEGER;
@@ -168,7 +168,7 @@ export default {
       if (this.filterNodeValue) {
         nodes = nodes.filter((x) => {
           return (
-            x.name.toLowerCase().indexOf(this.filterNodeValue.toLowerCase()) !==
+            x.id.toLowerCase().indexOf(this.filterNodeValue.toLowerCase()) !==
               -1 ||
             x.host.toLowerCase().indexOf(this.filterNodeValue.toLowerCase()) !==
               -1

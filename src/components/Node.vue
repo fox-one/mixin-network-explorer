@@ -98,6 +98,9 @@ export default {
   },
   methods: {
     formatTs: UtilsFn.FormatTs,
+    clickItem() {
+      this.$emit("click-item", this.data);
+    },
   },
 };
 </script>

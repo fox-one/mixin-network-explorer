@@ -25,7 +25,7 @@
         <div class="side" ref="side">
           <van-search
             class="side-search"
-            placeholder="name, host"
+            placeholder="id or host"
             shape="round"
             v-model="filterNodeValue"
           ></van-search>
